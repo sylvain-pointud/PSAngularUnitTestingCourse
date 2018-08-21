@@ -1,15 +1,23 @@
 import { HeroesComponent } from "./heroes.component";
 import { of } from "rxjs/observable/of";
 import { ComponentFixture, TestBed } from "@angular/core/testing";
-import { NO_ERRORS_SCHEMA } from "@angular/core";
+import { NO_ERRORS_SCHEMA, Input, Component } from "@angular/core";
 import { HeroService } from "../hero.service";
+import { Hero } from "../hero";
 
 describe('Heroes Component (shallow tests)', () => {
 
   let fixture: ComponentFixture<HeroesComponent>;
-  let HEROES;
-
+  let HEROES
   let mockHeroService;
+
+  @Component({
+    selector: 'app-hero',
+    template: '<div></div>',
+  })
+  class FakeHeroComponent {
+    @Input() hero: Hero;
+  }
 
   beforeEach(() => {
 
@@ -20,12 +28,13 @@ describe('Heroes Component (shallow tests)', () => {
       { id: 1, name: 'Wonderful woman', strengh: 24 },
       { id: 1, name: 'SuperDude', strengh: 55 }
     ]
+
     TestBed.configureTestingModule({
-      declarations: [HeroesComponent],
+      declarations: [HeroesComponent, FakeHeroComponent],
       providers: [
         { provide: HeroService, useValue: mockHeroService }
       ],
-      schemas: [NO_ERRORS_SCHEMA]
+      // schemas: [NO_ERRORS_SCHEMA] // we commented because we have now mock the child component
     })
 
     fixture = TestBed.createComponent(HeroesComponent);
