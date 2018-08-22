@@ -66,20 +66,36 @@ describe('Heroes Component (deep tests)', () => {
       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
     })
 
-    //we call the child component method and we check if the parent is listening 
-    it(`should call heroService.deleteHero because we manually emit it`, () => {
- 
-       spyOn(fixture.componentInstance, 'delete');
- 
-       mockHeroService.getHeroes.and.returnValue(of(HEROES));
-       //run ngOnInit
-       fixture.detectChanges();
- 
-       const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
- 
-       (<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
- 
-       expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
-     })
+  //we call the child component method and we check if the parent is listening 
+  it(`should call heroService.deleteHero because we manually emit it`, () => {
+
+    spyOn(fixture.componentInstance, 'delete');
+
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+    //run ngOnInit
+    fixture.detectChanges();
+
+    const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+
+    (<HeroComponent>heroComponents[0].componentInstance).delete.emit(undefined);
+
+    expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+  })
+
+  //we call the child component method and we check if the parent is listening 
+  it(`should call heroService.deleteHero because we manually trigger it`, () => {
+
+    spyOn(fixture.componentInstance, 'delete');
+
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+    //run ngOnInit
+    fixture.detectChanges();
+
+    const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+
+    heroComponents[0].triggerEventHandler('delete', undefined);
+
+    expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+  })
 
 })
