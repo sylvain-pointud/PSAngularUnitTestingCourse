@@ -83,7 +83,7 @@ describe('Heroes Component (deep tests)', () => {
   })
 
   //we call the child component method and we check if the parent is listening 
-  it(`should call heroService.deleteHero because we manually trigger it`, () => {
+  it('should call heroService.deleteHero because we manually trigger it', () => {
 
     spyOn(fixture.componentInstance, 'delete');
 
@@ -96,6 +96,28 @@ describe('Heroes Component (deep tests)', () => {
     heroComponents[0].triggerEventHandler('delete', undefined);
 
     expect(fixture.componentInstance.delete).toHaveBeenCalledWith(HEROES[0]);
+  })
+
+  it('should add a new hero to the heroes list when the add button is clicked', () => {
+    //Arrange
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+    //run ngOnInit
+    fixture.detectChanges();
+
+    const name = "New Hero";
+
+    mockHeroService.addHero.and.returnValue(of({ id: 5, name: name, strength: 11 }));
+
+    const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+    const addButtonElement = fixture.debugElement.queryAll(By.css('button'))[0];
+    
+    // Act
+    inputElement.value = name;
+    addButtonElement.triggerEventHandler('click',null);
+    fixture.detectChanges();
+    const heroText = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
+    //Assert
+    expect(heroText).toContain("New Hero");
   })
 
 })
