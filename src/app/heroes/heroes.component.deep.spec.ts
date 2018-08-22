@@ -9,7 +9,7 @@ import { HeroComponent } from "../hero/hero.component";
 
 @Directive({
   selector: '[routerLink]',
-  host: { '(click)': 'onclick()' }
+  host: { '(click)': 'onClick()' }
 })
 export class RouterLinkDirectiveStub {
   @Input('routerLink') linkParams: any;
@@ -129,6 +129,22 @@ describe('Heroes Component (deep tests)', () => {
     const heroText = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
     //Asert
     expect(heroText).toContain("New Hero");
+  })
+
+  it('should have the correct route for the first hero', () => {
+    mockHeroService.getHeroes.and.returnValue(of(HEROES));
+    //run ngOnInit
+    fixture.detectChanges();
+
+    const heroComponents = fixture.debugElement.queryAll(By.directive(HeroComponent));
+
+    let routerLink = heroComponents[0]
+      .query(By.directive(RouterLinkDirectiveStub))
+      .injector.get(RouterLinkDirectiveStub);
+
+    heroComponents[0].query(By.css('a')).triggerEventHandler('click', null);
+
+    expect(routerLink.navigatedTo).toBe('/detail/1');
   })
 
 })
