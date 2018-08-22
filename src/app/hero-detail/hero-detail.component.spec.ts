@@ -1,6 +1,6 @@
 import { HeroDetailComponent } from "./hero-detail.component";
 import { HeroService } from "../hero.service";
-import { TestBed, ComponentFixture, fakeAsync, tick, flush } from "@angular/core/testing";
+import { TestBed, ComponentFixture, fakeAsync, tick, flush, async } from "@angular/core/testing";
 import { Location } from '@angular/common';
 import { Testability } from "@angular/core/src/testability/testability";
 import { of } from "rxjs/observable/of";
@@ -51,5 +51,16 @@ describe('HeroDetailComponent', () => {
     // tick(300);
     flush()
     expect(mockHeroService.updateHero).toHaveBeenCalled();
+  }))
+
+  it('should call update hero when newsave function (using promise) is called', async(() => {
+    mockHeroService.updateHero.and.returnValue(of({}));
+    fixture.detectChanges();
+
+    fixture.componentInstance.newSave();
+    fixture.whenStable().then(() => {
+
+      expect(mockHeroService.updateHero).toHaveBeenCalled();
+    });
   }))
 })
