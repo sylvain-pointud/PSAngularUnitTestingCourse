@@ -4,7 +4,6 @@ import { ComponentFixture, TestBed } from "@angular/core/testing";
 import { NO_ERRORS_SCHEMA, Input, Component } from "@angular/core";
 import { HeroService } from "../hero.service";
 import { Hero } from "../hero";
-import { $ } from "protractor";
 import { By } from "@angular/platform-browser";
 import { HeroComponent } from "../hero/hero.component";
 
@@ -110,13 +109,13 @@ describe('Heroes Component (deep tests)', () => {
 
     const inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
     const addButtonElement = fixture.debugElement.queryAll(By.css('button'))[0];
-    
+
     // Act
     inputElement.value = name;
-    addButtonElement.triggerEventHandler('click',null);
+    addButtonElement.triggerEventHandler('click', null);
     fixture.detectChanges();
     const heroText = fixture.debugElement.query(By.css('ul')).nativeElement.textContent;
-    //Assert
+    //Asert
     expect(heroText).toContain("New Hero");
   })
 
